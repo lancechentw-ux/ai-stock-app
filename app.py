@@ -50,28 +50,34 @@ def generate_signal(df, chip_threshold=3):
     df = df.iloc[1:]
     df['Trade'] = signals
     return df
-
 def backtest(df):
+
     cash = 100000
     position = 0
+
     equity_curve = []
 
     for i in range(len(df)):
-        signal = df['Trade'].iloc[i]
-        price = df['Close'].iloc[i]
+
+        signal = str(df['Trade'].iloc[i])
+        price = float(df['Close'].iloc[i])
 
         if signal == 'BUY' and cash > 0:
+
             position = cash / price
             cash = 0
 
         elif signal == 'SELL' and position > 0:
+
             cash = position * price
             position = 0
 
         equity = cash + position * price
+
         equity_curve.append(equity)
 
     df['Equity'] = equity_curve
+
     return df
 
 st.title('📈 台股量化交易系統（Web App）')
